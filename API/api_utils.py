@@ -37,6 +37,6 @@ def remove_character(id):
     try:
         del data[id]
         save_json("characters.json", data)
-        return status.HTTP_200_OK
+        return status.HTTP_204_NO_CONTENT
     except:
         return status.HTTP_404_NOT_FOUND

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, status, HTTPException, Response
 
 from api_utils import (
     add_character,
@@ -35,8 +35,8 @@ def get_character(id: str):
         return chara_info
 
 
-@app.post("/createchar")
-def create_char(character: Character, status_code=status.HTTP_201_CREATED):
+@app.post("/createchar", status_code=status.HTTP_201_CREATED)
+def create_char(character: Character):
     data = load_json("characters.json")
     add_character(character.model_dump(), data)
     save_json("characters.json", data)
@@ -45,7 +45,7 @@ def create_char(character: Character, status_code=status.HTTP_201_CREATED):
     return {"new_character": character.model_dump()}
 
 
-@app.delete("/characters/")
+@app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_character(id):
     response = remove_character(id)
     if response == 404:
@@ -54,4 +54,4 @@ def delete_character(id):
             detail="cannot delete a non-existent id",
         )
     else:
-        return {"message": f"character {id} deleted"}
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
