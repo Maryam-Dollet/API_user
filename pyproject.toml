@@ -8,6 +8,7 @@ packages = [{include = "api_user"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.103.0"}
 
 
 [build-system]
