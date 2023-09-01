@@ -65,7 +65,7 @@ def update_character(id: str, character: Character):
     if response == 404:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="cannot delete a non-existent id",
+            detail="cannot update a non-existent id",
         )
     else:
         return {"message": "character updated"}
