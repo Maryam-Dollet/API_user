@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import json
 
 app = FastAPI()
 
@@ -10,4 +11,6 @@ async def root():
 
 @app.get("/characters")
 def get_characters():
-    return {"data": "list of characters"}
+    with open("../data/characters.json", "r") as f:
+        data = json.load(f)
+    return data
