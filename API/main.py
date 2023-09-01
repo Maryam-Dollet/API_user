@@ -1,6 +1,4 @@
 from fastapi import FastAPI
-from fastapi.params import Body
-import json
 
 from api_utils import add_character, save_json, load_json
 from schemas.character import Character
@@ -14,7 +12,7 @@ async def root():
 
 
 @app.get("/characters")
-def get_character_id():
+def get_character_ids():
     data = load_json("characters.json")
     return list(data.keys())
 
