@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "api-user"
+version = "0.1.0"
+description = ""
+authors = ["Maryam-Dollet <maryam.dollet@gmail.com>"]
+readme = "README.md"
+packages = [{include = "api_user"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
