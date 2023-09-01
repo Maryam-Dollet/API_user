@@ -21,13 +21,15 @@ def get_character_id():
 
 
 @app.post("/createchar")
-def create_char(payload: Character):
+def create_char(character: Character):
     with open("data/characters.json", "r") as f:
         data = json.load(f)
 
-    add_character(payload.name, payload.occupation, data)
+    add_character(character.name, character.occupation, data)
 
     save_json("characters.json", data)
-    print(payload)
-    print(payload.model_dump())
-    return {"new_character": f"name: {payload.name}, occupation: {payload.occupation}"}
+    print(character)
+    print(character.model_dump())
+    return {
+        "new_character": f"name: {character.name}, occupation: {character.occupation}"
+    }
