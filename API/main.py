@@ -10,7 +10,7 @@ async def root():
 
 
 @app.get("/characters")
-def get_characters():
+def get_character_id():
     with open("../data/characters.json", "r") as f:
         data = json.load(f)
-    return data
+    return list(data.keys())
