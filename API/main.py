@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 import json
 
-from api_utils import create_character, save_json
-
 app = FastAPI()
 
 
