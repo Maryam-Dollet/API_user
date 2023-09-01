@@ -2,13 +2,19 @@
     "90df4a8c-48ce-11ee-aa62-60e32bd1f492": {
         "name": "Blair",
         "occupation": "Bodyguard",
-        "age": null,
+        "age": "Not Specified",
         "affiliation": "Not provided"
     },
     "a8773997-48ce-11ee-a892-60e32bd1f492": {
         "name": "Lorelei",
         "occupation": "Priest",
         "age": 20,
+        "affiliation": "Not provided"
+    },
+    "166fc8af-48d8-11ee-8b7d-60e32bd1f492": {
+        "name": "Baphomet",
+        "occupation": "Demon",
+        "age": "???",
         "affiliation": "Not provided"
     }
 }

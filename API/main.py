@@ -6,6 +6,7 @@ from api_utils import (
     load_json,
     get_character_ids,
     get_character_info,
+    remove_character,
 )
 from schemas.character import Character
 
@@ -42,3 +43,15 @@ def create_char(character: Character, status_code=status.HTTP_201_CREATED):
 
     print(character)
     return {"new_character": character.model_dump()}
+
+
+@app.delete("/characters/")
+def delete_character(id):
+    response = remove_character(id)
+    if response == 404:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
+        )
+    else:
+        return {"message": f"character {id} deleted"}
