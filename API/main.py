@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status, HTTPException
 
 from api_utils import (
     add_character,
@@ -24,9 +24,16 @@ def get_character_ids():
 
 
 @app.get("/characters/")
-def get_character(id: str):
+def get_character(id: str, response: Response):
     chara_info = get_character_info(id)
-    return chara_info
+    if chara_info == 404:
+        # response.status_code = status.HTTP_404_NOT_FOUND
+        # return {"message": f"character id {id} not found"}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"character id {id} not found"
+        )
+    else:
+        return chara_info
 
 
 @app.post("/createchar")

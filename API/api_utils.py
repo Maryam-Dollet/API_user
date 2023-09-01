@@ -24,8 +24,7 @@ def get_character_info(id):
     try:
         return data[id]
     except:
-        response = Response().status_code = status.HTTP_404_NOT_FOUND
-        return response
+        return 404
 
 
 def add_character(character_info, char_list: list):
