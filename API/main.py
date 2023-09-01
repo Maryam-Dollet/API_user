@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.params import Body
 import json
 
+from api_utils import add_character, save_json
+
 app = FastAPI()
 
 
@@ -19,7 +21,13 @@ def get_character_id():
 
 @app.post("/createchar")
 def create_char(payload: dict = Body(...)):
-    print(payload)
+    with open("../data/characters.json", "r") as f:
+        data = json.load(f)
+
+    add_character(payload["name"], payload["occupation"], data)
+
+    save_json("characters.json", data)
+
     return {
         "new_character": f"name: {payload['name']}, occupation: {payload['occupation']}"
     }
