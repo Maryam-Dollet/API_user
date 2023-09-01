@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.params import Body
 import json
 
 app = FastAPI()
@@ -17,5 +18,6 @@ def get_character_id():
 
 
 @app.post("/createchar")
-def create_char():
+def create_char(payload: dict = Body()):
+    print(payload)
     return {"message": "successfully created character"}
