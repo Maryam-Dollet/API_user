@@ -16,3 +16,8 @@ def get_character_id():
     with open("../data/characters.json", "r") as f:
         data = json.load(f)
     return list(data.keys())
+
+
+@app.post("/createchar")
+def create_char():
+    return {"message": "successfully created character"}
