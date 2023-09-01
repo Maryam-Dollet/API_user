@@ -24,11 +24,9 @@ def get_character_ids():
 
 
 @app.get("/characters/")
-def get_character(id: str, response: Response):
+def get_character(id: str):
     chara_info = get_character_info(id)
     if chara_info == 404:
-        # response.status_code = status.HTTP_404_NOT_FOUND
-        # return {"message": f"character id {id} not found"}
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"character id {id} not found"
         )
@@ -37,7 +35,7 @@ def get_character(id: str, response: Response):
 
 
 @app.post("/createchar")
-def create_char(character: Character):
+def create_char(character: Character, status_code=status.HTTP_201_CREATED):
     data = load_json("characters.json")
     add_character(character.model_dump(), data)
     save_json("characters.json", data)

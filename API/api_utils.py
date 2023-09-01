@@ -1,6 +1,5 @@
 import uuid
 import json
-from fastapi import Response, status
 
 
 def load_json(filename: str):
