@@ -1,5 +1,6 @@
 import uuid
 import json
+from fastapi import Response, status
 
 
 def load_json(filename: str):
@@ -20,7 +21,11 @@ def get_character_ids():
 
 def get_character_info(id):
     data = load_json("characters.json")
-    return data[id]
+    try:
+        return data[id]
+    except:
+        response = Response().status_code = status.HTTP_404_NOT_FOUND
+        return response
 
 
 def add_character(character_info, char_list: list):

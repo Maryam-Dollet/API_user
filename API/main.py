@@ -24,7 +24,7 @@ def get_character_ids():
 
 
 @app.get("/characters/")
-def get_character(id):
+def get_character(id: str):
     chara_info = get_character_info(id)
     return chara_info
 
@@ -36,5 +36,4 @@ def create_char(character: Character):
     save_json("characters.json", data)
 
     print(character)
-    # print(character.model_dump())
     return {"new_character": character.model_dump()}
