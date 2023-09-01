@@ -20,4 +20,4 @@ def get_character_id():
 @app.post("/createchar")
 def create_char(payload: dict = Body()):
     print(payload)
-    return {"new_character": f"name {payload.name}, occupation"}
+    return {"new_character": f"name: {payload.name}, occupation: {payload.occupation}"}
