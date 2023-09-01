@@ -29,4 +29,4 @@ def create_char(payload: Character):
 
     save_json("characters.json", data)
     # print(payload)
-    return {"new_character": f"name: {payload.name}"}
+    return {"new_character": f"name: {payload.name}, occupation: {payload.occupation}"}
