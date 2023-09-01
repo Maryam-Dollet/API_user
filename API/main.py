@@ -20,7 +20,7 @@ def get_character_ids():
 @app.post("/createchar")
 def create_char(character: Character):
     data = load_json("characters.json")
-    add_character(character.name, character.occupation, data)
+    add_character(character.model_dump(), data)
     save_json("characters.json", data)
 
     print(character)

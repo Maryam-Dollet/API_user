@@ -2,10 +2,9 @@ import uuid
 import json
 
 
-def add_character(name: str, occupation: str, char_list: list):
+def add_character(character_info, char_list: list):
     id = uuid.uuid1()
-    character = {"name": name, "occupation": occupation}
-    char_list[str(id)] = character
+    char_list[str(id)] = character_info
 
 
 def load_json(filename: str):
