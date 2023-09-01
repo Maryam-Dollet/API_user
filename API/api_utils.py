@@ -9,5 +9,5 @@ def add_character(name: str, occupation: str, char_list: list):
 
 
 def save_json(filename: str, data: dict | list):
-    with open(f"../data/{filename}", "w") as f:
+    with open(f"data/{filename}", "w") as f:
         json.dump(data, f)
