@@ -28,5 +28,6 @@ def create_char(payload: Character):
     add_character(payload.name, payload.occupation, data)
 
     save_json("characters.json", data)
-    # print(payload)
+    print(payload)
+    print(payload.model_dump())
     return {"new_character": f"name: {payload.name}, occupation: {payload.occupation}"}
