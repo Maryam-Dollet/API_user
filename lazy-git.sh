@@ -2,5 +2,9 @@
 set -e
 black .
 git add .
-git commit -m "$1"
+
+echo Type message
+read -p "Message: " message
+
+git commit -m "$message"
 git push
