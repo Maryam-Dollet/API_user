@@ -24,7 +24,5 @@ def create_char(character: Character):
     save_json("characters.json", data)
 
     print(character)
-    print(character.model_dump())
-    return {
-        "new_character": f"name: {character.name}, occupation: {character.occupation}"
-    }
+    # print(character.model_dump())
+    return {"new_character": character.model_dump()}
