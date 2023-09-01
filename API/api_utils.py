@@ -40,3 +40,13 @@ def remove_character(id):
         return status.HTTP_204_NO_CONTENT
     except:
         return status.HTTP_404_NOT_FOUND
+
+
+def update_char(id, update_info):
+    data = load_json("characters.json")
+    try:
+        data[id] = update_info
+        save_json("characters.json", data)
+        return status.HTTP_202_ACCEPTED
+    except:
+        return status.HTTP_404_NOT_FOUND

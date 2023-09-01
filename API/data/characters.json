@@ -10,5 +10,11 @@
         "occupation": "Priest",
         "age": 20,
         "affiliation": "Not provided"
+    },
+    "b4762ff7-48e3-11ee-a428-60e32bd1f492": {
+        "name": "Baphomet",
+        "occupation": "Demon",
+        "age": "???",
+        "affiliation": "Not provided"
     }
 }

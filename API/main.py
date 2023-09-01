@@ -7,6 +7,7 @@ from api_utils import (
     get_character_ids,
     get_character_info,
     remove_character,
+    update_char,
 )
 from schemas.character import Character
 
@@ -46,7 +47,7 @@ def create_char(character: Character):
 
 
 @app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
-def delete_character(id):
+def delete_character(id: str):
     response = remove_character(id)
     if response == 404:
         raise HTTPException(
@@ -55,3 +56,16 @@ def delete_character(id):
         )
     else:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.put("/characters/")
+def update_character(id: str, character: Character):
+    print(character)
+    response = update_char(id, character.model_dump())
+    if response == 404:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
+        )
+    else:
+        return {"message": "character updated"}
