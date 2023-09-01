@@ -7,6 +7,16 @@ def add_character(character_info, char_list: list):
     char_list[str(id)] = character_info
 
 
+def get_character_ids():
+    data = load_json("characters.json")
+    return list(data.keys())
+
+
+def get_character_info(id):
+    data = load_json("characters.json")
+    return data[id]
+
+
 def load_json(filename: str):
     with open(f"data/{filename}", "r") as f:
         data = json.load(f)
