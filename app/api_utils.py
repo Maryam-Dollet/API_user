@@ -2,6 +2,10 @@ import uuid
 import json
 from fastapi import status
 
+from database_utils import db_connection
+
+cursor_dict, cursor_real_dict = db_connection()
+
 
 def load_json(filename: str):
     with open(f"data/{filename}", "r") as f:

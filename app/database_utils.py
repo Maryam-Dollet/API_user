@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2.extras import RealDictCursor
+from psycopg2.extras import DictCursor, RealDictCursor
 import os
 import time
 from dotenv import load_dotenv
@@ -16,11 +16,12 @@ def db_connection():
                 user=os.getenv("USER"),
                 password=os.getenv("PASSWORD"),
                 port=os.getenv("PORT"),
-                cursor_factory=RealDictCursor,
             )
-            cursor = connection.cursor()
+            cursor_dict = connection.cursor(cursor_factory=DictCursor)
+            cursor_realdict = connection.cursor(cursor_factory=RealDictCursor)
+            # cursor = connection.cursor()
             print("Database connection was succeful \U0001F44C !")
-            return cursor
+            return cursor_dict, cursor_realdict
         except Exception as error:
             print("Connecting to Database failed...")
             print("Error : ", error)

@@ -13,7 +13,7 @@ from database_utils import db_connection
 from schemas.character import Character
 
 app = FastAPI()
-cursor = db_connection()
+cursor_dict, cursor_real_dict = db_connection()
 
 
 @app.get("/")
@@ -23,11 +23,12 @@ async def root():
 
 @app.get("/characters")
 def get_character_id():
-    cursor.execute("""SELECT character_id FROM characters """)
-    characters = cursor.fetchall()
-    print(characters)
-    # id_list = get_character_ids()
-    return {"data": characters}
+    cursor_dict.execute("""SELECT character_id FROM characters """)
+    characters = cursor_dict.fetchall()
+    character_list = []
+    for x in range(len(characters)):
+        character_list.append([x for x in characters[x].values()])
+    return {"data": character_list}
 
 
 @app.get("/characters/")
