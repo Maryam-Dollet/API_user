@@ -2,8 +2,6 @@ from fastapi import FastAPI, status, HTTPException, Response
 
 from api_utils import (
     add_character,
-    save_json,
-    load_json,
     get_character_ids,
     find_character,
     remove_character,
