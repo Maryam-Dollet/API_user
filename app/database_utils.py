@@ -20,7 +20,7 @@ def db_connection():
             )
             cursor = connection.cursor()
             print("Database connection was succeful \U0001F44C !")
-            break
+            return cursor
         except Exception as error:
             print("Connecting to Database failed...")
             print("Error : ", error)
