@@ -23,7 +23,7 @@ def get_character_ids():
     characters = cursor_dict.fetchall()
     character_list = []
     for x in range(len(characters)):
-        character_list.append([x for x in characters[x].values()])
+        character_list.append([x for x in characters[x]][0])
     return character_list
 
 
