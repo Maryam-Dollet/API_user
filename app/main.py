@@ -56,7 +56,6 @@ def delete_character(id: str):
 
 @app.put("/characters/")
 def update_character(id: str, character: Character):
-    print(character)
     response = update_char(id, character.model_dump())
     if response == 404:
         raise HTTPException(
@@ -64,4 +63,4 @@ def update_character(id: str, character: Character):
             detail="cannot update a non-existent id",
         )
     else:
-        return {"message": "character updated"}
+        return {"message": response}
