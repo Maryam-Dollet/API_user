@@ -31,12 +31,12 @@ def get_character_ids():
 
 def find_character(id):
     query = "SELECT * FROM characters WHERE character_id = %s"
-    try:
-        cursor_real_dict.execute(query, (id,))
-        character = cursor_real_dict.fetchone()
-        return character
-    except:
+    cursor_real_dict.execute(query, (id,))
+    character = cursor_real_dict.fetchone()
+    if character == None:
         return status.HTTP_404_NOT_FOUND
+    else:
+        return character
 
 
 def add_character(character_info):
@@ -57,13 +57,14 @@ def add_character(character_info):
 
 
 def remove_character(id):
-    data = load_json("characters.json")
-    try:
-        del data[id]
-        save_json("characters.json", data)
-        return status.HTTP_204_NO_CONTENT
-    except:
+    query = "DELETE FROM characters WHERE character_id = %s RETURNING *"
+    cursor_real_dict.execute(query, (id,))
+    deleted_character = cursor_real_dict.fetchone()
+    connection.commit()
+    if deleted_character == None:
         return status.HTTP_404_NOT_FOUND
+    else:
+        return status.HTTP_204_NO_CONTENT
 
 
 def update_char(id, update_info):
