@@ -30,13 +30,17 @@ def get_character_ids():
 
 
 def find_character(id):
-    query = "SELECT * FROM characters WHERE character_id = %s"
-    cursor_real_dict.execute(query, (id,))
-    character = cursor_real_dict.fetchone()
-    if character == None:
+    try:
+        query = "SELECT * FROM characters WHERE character_id = %s"
+        cursor_real_dict.execute(query, (id,))
+        character = cursor_real_dict.fetchone()
+        if character == None:
+            return status.HTTP_404_NOT_FOUND
+        else:
+            return character
+    except:
+        connection.rollback()
         return status.HTTP_404_NOT_FOUND
-    else:
-        return character
 
 
 def add_character(character_info):
