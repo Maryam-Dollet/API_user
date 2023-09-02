@@ -21,10 +21,11 @@ load_dotenv()
 
 try:
     connection = psycopg2.connect(
-        host="localhost",
+        host="/tmp/",
         database=os.getenv("DATABASE"),
         user=os.getenv("USER"),
         password=os.getenv("PASSWORD"),
+        port="5432",
         cursor_factory=RealDictCursor,
     )
     cursor = connection.cursor()
