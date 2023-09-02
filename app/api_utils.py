@@ -41,16 +41,16 @@ def get_character_info(id):
 
 
 def add_character(character_info):
-    try:
-        cursor_real_dict.execute(
-            """ INSERT INTO characters (name, occupation) VALUES (%s, %s) RETURNING *""",
-            (character_info["name"], character_info["occupation"]),
-        )
-        new_post = cursor_real_dict.fetchone()
-        connection.commit()
-        return new_post
-    except:
-        return status.HTTP_404_NOT_FOUND
+    # try:
+    cursor_real_dict.execute(
+        """ INSERT INTO characters (name, occupation, age) VALUES (%s, %s, %s) RETURNING *""",
+        (character_info["name"], character_info["occupation"], character_info["age"]),
+    )
+    new_post = cursor_real_dict.fetchone()
+    connection.commit()
+    return new_post
+    # except:
+    #     return status.HTTP_404_NOT_FOUND
 
 
 def remove_character(id):
