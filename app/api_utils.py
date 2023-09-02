@@ -1,4 +1,3 @@
-import uuid
 import json
 from fastapi import status
 
@@ -29,7 +28,7 @@ def get_character_ids():
     return character_list
 
 
-def find_character(id):
+def find_character(id: str):
     try:
         query = "SELECT * FROM characters WHERE character_id = %s"
         cursor_real_dict.execute(query, (id,))
@@ -43,7 +42,7 @@ def find_character(id):
         return status.HTTP_404_NOT_FOUND
 
 
-def add_character(character_info):
+def add_character(character_info: dict):
     try:
         cursor_real_dict.execute(
             """ INSERT INTO characters (name, occupation, age) VALUES (%s, %s, %s) RETURNING *""",
@@ -71,7 +70,7 @@ def remove_character(id: str):
         return status.HTTP_204_NO_CONTENT
 
 
-def update_char(id: str, update_info):
+def update_char(id: str, update_info: dict):
     query = "UPDATE characters SET name = %s, occupation = %s, age = %s WHERE character_id = %s RETURNING *"
     cursor_real_dict.execute(
         query, (update_info["name"], update_info["occupation"], update_info["age"], id)
