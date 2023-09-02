@@ -21,16 +21,21 @@ def save_json(filename: str, data: dict | list):
 def get_character_ids():
     cursor_dict.execute("""SELECT character_id FROM characters """)
     characters = cursor_dict.fetchall()
+
     character_list = []
     for x in range(len(characters)):
         character_list.append([x for x in characters[x]][0])
+
     return character_list
 
 
 def get_character_info(id):
-    data = load_json("characters.json")
     try:
-        return data[id]
+        cursor_real_dict.execute(
+            f"""SELECT * FROM characters WHERE character_id = '{id}'"""
+        )
+        character = cursor_real_dict.fetchone()
+        return character
     except:
         return status.HTTP_404_NOT_FOUND
 
