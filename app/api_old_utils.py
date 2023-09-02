@@ -2,10 +2,6 @@ import uuid
 import json
 from fastapi import status
 
-from database_utils import db_connection
-
-cursor_dict, cursor_real_dict = db_connection()
-
 
 def load_json(filename: str):
     with open(f"data/{filename}", "r") as f:
@@ -19,12 +15,8 @@ def save_json(filename: str, data: dict | list):
 
 
 def get_character_ids():
-    cursor_dict.execute("""SELECT character_id FROM characters """)
-    characters = cursor_dict.fetchall()
-    character_list = []
-    for x in range(len(characters)):
-        character_list.append([x for x in characters[x].values()])
-    return character_list
+    data = load_json("characters.json")
+    return list(data.keys())
 
 
 def get_character_info(id):

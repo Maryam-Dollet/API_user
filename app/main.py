@@ -9,11 +9,9 @@ from api_utils import (
     remove_character,
     update_char,
 )
-from database_utils import db_connection
 from schemas.character import Character
 
 app = FastAPI()
-cursor_dict, cursor_real_dict = db_connection()
 
 
 @app.get("/")
@@ -23,12 +21,7 @@ async def root():
 
 @app.get("/characters")
 def get_character_id():
-    cursor_dict.execute("""SELECT character_id FROM characters """)
-    characters = cursor_dict.fetchall()
-    character_list = []
-    for x in range(len(characters)):
-        character_list.append([x for x in characters[x].values()])
-    return {"data": character_list}
+    return {"data": get_character_ids()}
 
 
 @app.get("/characters/")
