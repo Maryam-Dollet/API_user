@@ -1,8 +1,4 @@
 from fastapi import FastAPI, status, HTTPException, Response
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import os
-from dotenv import load_dotenv
 
 from api_utils import (
     add_character,
@@ -13,26 +9,11 @@ from api_utils import (
     remove_character,
     update_char,
 )
+from database_utils import db_connection
 from schemas.character import Character
 
 app = FastAPI()
-
-load_dotenv()
-
-try:
-    connection = psycopg2.connect(
-        host="localhost",
-        database=os.getenv("DATABASE"),
-        user=os.getenv("USER"),
-        password=os.getenv("PASSWORD"),
-        port="5432",
-        cursor_factory=RealDictCursor,
-    )
-    cursor = connection.cursor()
-    print("Database connection was succeful")
-except Exception as error:
-    print("Connecting to Database failed")
-    print("Error : ", error)
+db_connection()
 
 
 @app.get("/")
