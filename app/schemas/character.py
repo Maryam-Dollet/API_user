@@ -5,5 +5,5 @@ from typing import Optional
 class Character(BaseModel):
     name: str
     occupation: str
-    age: int | str = "Not specified"
+    age: int = None
     affiliation: Optional[str] = "Not provided"

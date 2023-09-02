@@ -32,7 +32,7 @@ def get_character_ids():
 def get_character_info(id):
     try:
         cursor_real_dict.execute(
-            f"""SELECT * FROM characters WHERE character_id = '{id}'"""
+            """SELECT * FROM characters WHERE character_id = %s""", id
         )
         character = cursor_real_dict.fetchone()
         return character
@@ -40,9 +40,11 @@ def get_character_info(id):
         return status.HTTP_404_NOT_FOUND
 
 
-def add_character(character_info, char_list: list):
-    id = uuid.uuid1()
-    char_list[str(id)] = character_info
+def add_character(character_info):
+    cursor_real_dict.execute(
+        """ INSERT INTO characters (name, occupation, age) VALUES (%s, %s, %s)""",
+        (character_info.name, character_info.occupation, character_info.age),
+    )
 
 
 def remove_character(id):
