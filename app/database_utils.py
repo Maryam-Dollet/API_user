@@ -22,7 +22,7 @@ def db_connection():
             # cursor = connection.cursor()
             print("Database connection was succeful \U0001F44C !")
             return connection, cursor_dict, cursor_realdict
-        except Exception as error:
+        except (Exception, psycopg2.Error) as error:
             print("Connecting to Database failed...")
             print("Error : ", error)
             time.sleep(2)

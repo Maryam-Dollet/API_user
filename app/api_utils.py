@@ -30,10 +30,9 @@ def get_character_ids():
 
 
 def find_character(id):
+    query = "SELECT * FROM characters WHERE character_id = %s"
     try:
-        cursor_real_dict.execute(
-            """SELECT * FROM characters WHERE character_id = %s""", (id,)
-        )
+        cursor_real_dict.execute(query, (id,))
         character = cursor_real_dict.fetchone()
         return character
     except:
