@@ -5,7 +5,7 @@ from api_utils import (
     save_json,
     load_json,
     get_character_ids,
-    get_character_info,
+    find_character,
     remove_character,
     update_char,
 )
@@ -25,14 +25,14 @@ def get_character_id():
 
 
 @app.get("/characters/")
-def get_character(id: str):
-    chara_info = get_character_info(id)
-    if chara_info == 404:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"character id {id} not found"
-        )
-    else:
-        return chara_info
+def get_character(id):
+    chara_info = find_character(id)
+    # if isinstance(chara_info, int) and chara_info == 404:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND, detail=f"character id {id} not found"
+    #     )
+    # else:
+    return chara_info
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
