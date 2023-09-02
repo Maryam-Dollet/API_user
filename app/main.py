@@ -19,20 +19,20 @@ app = FastAPI()
 
 load_dotenv()
 
-try:
-    connection = psycopg2.connect(
-        host="/tmp/",
-        database=os.getenv("DATABASE"),
-        user=os.getenv("USER"),
-        password=os.getenv("PASSWORD"),
-        port="5432",
-        cursor_factory=RealDictCursor,
-    )
-    cursor = connection.cursor()
-    print("Database connection was succeful")
-except Exception as error:
-    print("Connecting to Database failed")
-    print("Error : ", error)
+# try:
+connection = psycopg2.connect(
+    host="localhost",
+    database=os.getenv("DATABASE"),
+    user=os.getenv("USER"),
+    password=os.getenv("PASSWORD"),
+    port="5432",
+    cursor_factory=RealDictCursor,
+)
+cursor = connection.cursor()
+# print("Database connection was succeful")
+# except Exception as error:
+#     print("Connecting to Database failed")
+#     print("Error : ", error)
 
 
 @app.get("/")
