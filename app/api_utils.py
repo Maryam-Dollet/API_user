@@ -4,7 +4,7 @@ from fastapi import status
 
 from database_utils import db_connection
 
-cursor_dict, cursor_real_dict = db_connection()
+connection, cursor_dict, cursor_real_dict = db_connection()
 
 
 def load_json(filename: str):
@@ -41,10 +41,16 @@ def get_character_info(id):
 
 
 def add_character(character_info):
-    cursor_real_dict.execute(
-        """ INSERT INTO characters (name, occupation, age) VALUES (%s, %s, %s)""",
-        (character_info.name, character_info.occupation, character_info.age),
-    )
+    try:
+        cursor_real_dict.execute(
+            """ INSERT INTO characters (name, occupation) VALUES (%s, %s) RETURNING *""",
+            (character_info["name"], character_info["occupation"]),
+        )
+        new_post = cursor_real_dict.fetchone()
+        connection.commit()
+        return new_post
+    except:
+        return status.HTTP_404_NOT_FOUND
 
 
 def remove_character(id):

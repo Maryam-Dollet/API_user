@@ -37,11 +37,9 @@ def get_character(id: str):
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
 def create_char(character: Character):
-    # data = load_json("characters.json")
-    # add_character(character.model_dump(), data)
-    # save_json("characters.json", data)
-
-    return {"new_character": character.model_dump()}
+    # print(character.model_dump())
+    message = add_character(character.model_dump())
+    return {"message": message}
 
 
 @app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)

@@ -21,7 +21,7 @@ def db_connection():
             cursor_realdict = connection.cursor(cursor_factory=RealDictCursor)
             # cursor = connection.cursor()
             print("Database connection was succeful \U0001F44C !")
-            return cursor_dict, cursor_realdict
+            return connection, cursor_dict, cursor_realdict
         except Exception as error:
             print("Connecting to Database failed...")
             print("Error : ", error)
