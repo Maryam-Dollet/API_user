@@ -42,13 +42,12 @@ def get_character(id: str, db: Session = Depends(get_db)):
             .filter(models.Character.character_id == id)
             .first()
         )
+        # print(character_info)
         if not character_info:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"character id {id} not found",
             )
-        else:
-            return character_info
+        return character_info
     except (Exception, exc.SQLAlchemyError) as error:
         # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -65,24 +64,44 @@ def create_char(character: Character, db: Session = Depends(get_db)):
 
 
 @app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
-def delete_character(id: str):
-    response = remove_character(id)
-    if response == 404:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="cannot delete a non-existent id",
+def delete_character(id: str, db: Session = Depends(get_db)):
+    try:
+        character = db.query(models.Character).filter(
+            models.Character.character_id == id
         )
-    else:
+
+        if character.first() == None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="cannot delete a non-existent id",
+            )
+
+        character.delete(synchronize_session=False)
+        db.commit()
+
         return Response(status_code=status.HTTP_204_NO_CONTENT)
+    except:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
 @app.put("/characters/")
-def update_character(id: str, character: Character):
-    response = update_char(id, character.model_dump())
-    if response == 404:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="cannot update a non-existent id",
+def update_character(id: str, character: Character, db: Session = Depends(get_db)):
+    try:
+        character_query = db.query(models.Character).filter(
+            models.Character.character_id == id
         )
-    else:
-        return {"message": response}
+
+        updated_character = character_query.first()
+
+        if updated_character == None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="cannot delete a non-existent id",
+            )
+
+        character_query.update(character.model_dump(), synchronize_session=False)
+        db.commit()
+
+        return {"data": character_query.first()}
+    except:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
