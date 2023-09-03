@@ -6,7 +6,7 @@ from schemas.character import CharacterBase, CharacterResponse
 from database_utils import get_db
 import models
 
-router = APIRouter()
+router = APIRouter(tags=["Characters"])
 
 
 @router.get("/all_characters", response_model=List[CharacterResponse])
@@ -51,7 +51,7 @@ def create_char(character: CharacterBase, db: Session = Depends(get_db)):
     return new_character
 
 
-@router.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/characters", status_code=status.HTTP_204_NO_CONTENT)
 def delete_character(id: str, db: Session = Depends(get_db)):
     try:
         character = db.query(models.Character).filter(
@@ -72,7 +72,7 @@ def delete_character(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@router.put("/characters/", response_model=CharacterResponse)
+@router.put("/characters", response_model=CharacterResponse)
 def update_character(id: str, character: CharacterBase, db: Session = Depends(get_db)):
     try:
         character_query = db.query(models.Character).filter(
