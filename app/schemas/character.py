@@ -17,6 +17,7 @@ class CharacterCreate(CharacterBase):
 class CharacterResponse(CharacterBase):
     # character_id: UUID
     # created_at: datetime
+    user_id: UUID
 
     class Config:
         from_attributes = True
