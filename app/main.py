@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from api_utils import (
     add_character,
-    get_character_ids,
     find_character,
     remove_character,
     update_char,
@@ -35,7 +34,7 @@ def get_character_id(db: Session = Depends(get_db)):
 
 
 @app.get("/characters/")
-def get_character(id):
+def get_character(id, db: Session = Depends(get_db)):
     chara_info = find_character(id)
     if chara_info == 404:
         raise HTTPException(
@@ -46,10 +45,13 @@ def get_character(id):
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
-def create_char(character: Character):
-    # print(character.model_dump())
-    message = add_character(character.model_dump())
-    return {"message": message}
+def create_char(character: Character, db: Session = Depends(get_db)):
+    # ** unpack the dictionary
+    new_character = models.Character(**character.model_dump())
+    db.add(new_character)
+    db.commit()
+    db.refresh(new_character)
+    return {"message": new_character}
 
 
 @app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
