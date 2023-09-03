@@ -34,14 +34,11 @@ def get_character_id(db: Session = Depends(get_db)):
 
 
 @app.get("/characters/")
-def get_character(id, db: Session = Depends(get_db)):
-    chara_info = find_character(id)
-    if chara_info == 404:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"character id {id} not found"
-        )
-    else:
-        return chara_info
+def get_character(id: str, db: Session = Depends(get_db)):
+    character_info = (
+        db.query(models.Character).filter(models.Character.character_id == id).first()
+    )
+    return character_info
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
