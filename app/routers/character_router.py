@@ -47,9 +47,11 @@ def create_char(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
-    print(current_user.email)
+    # print(current_user.user_id)
     # ** unpack the dictionary
-    new_character = models.Character(**character.model_dump())
+    new_character = models.Character(
+        **character.model_dump(), user_id=current_user.user_id
+    )
     db.add(new_character)
     db.commit()
     db.refresh(new_character)
