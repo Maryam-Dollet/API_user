@@ -1,5 +1,5 @@
 from database_utils import Base
-from sqlalchemy import Column, String, Integer, text
+from sqlalchemy import Column, String, Integer, text, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
@@ -15,6 +15,11 @@ class Character(Base):
     affiliation = Column(String, nullable=True, server_default="Not Provided")
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
     )
 
 
