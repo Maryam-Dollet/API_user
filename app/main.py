@@ -105,3 +105,8 @@ def update_character(id: str, character: CharacterBase, db: Session = Depends(ge
         return character_query.first()
     except:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+
+@app.post("/users", status_code=status.HTTP_201_CREATED)
+def create_user(db: Session = Depends(get_db)):
+    return {"message": "user created"}
