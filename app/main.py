@@ -24,15 +24,14 @@ async def root():
 
 @app.get("/sqlalchemy")
 def test_character(db: Session = Depends(get_db)):
-    # characters = db.query(models.Character).all()
-    characters = db.query(models.Character)
-    print(characters)
-    return {"data": "success"}
+    characters = db.query(models.Character).all()
+    return {"data": characters}
 
 
 @app.get("/characters")
-def get_character_id():
-    return {"data": get_character_ids()}
+def get_character_id(db: Session = Depends(get_db)):
+    character_id_list = db.query(models.Character.character_id).all()
+    return {"data": [x[0] for x in character_id_list]}
 
 
 @app.get("/characters/")
