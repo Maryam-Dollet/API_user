@@ -120,3 +120,19 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+@app.get("users/", response_model=UserOut)
+def get_user(id: str, db: Session = Depends(get_db)):
+    try:
+        user = db.query(models.User).filter(models.User.user_id == id).first()
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="cannot access a non-existent user",
+            )
+
+        return user
+    except:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
