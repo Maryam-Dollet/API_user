@@ -50,7 +50,8 @@ def get_character(id: str, db: Session = Depends(get_db)):
         else:
             return character_info
     except (Exception, exc.SQLAlchemyError) as error:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
+        # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
