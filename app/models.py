@@ -16,3 +16,12 @@ class Character(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
+
+
+class User(Base):
+    __tablename__ = "users"
+    user_id = Column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("uuid_generate_v1()")
+    )
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
