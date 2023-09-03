@@ -10,20 +10,11 @@ from api_utils import (
 )
 from schemas.character import Character
 import models
-from database_utils import engine, SessionLocal
+from database_utils import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-
-def get_db():
-    """Enables to Connect to the database then to close the connection once the request is fulfilled."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @app.get("/")

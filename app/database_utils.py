@@ -24,6 +24,15 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
+def get_db():
+    """Enables to Connect to the database then to close the connection once the request is fulfilled."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 def db_connection():
     while True:
         try:
