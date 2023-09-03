@@ -55,7 +55,7 @@ def create_char(
     return new_character
 
 
-@router.delete("/characters", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_character(
     id: str,
     db: Session = Depends(get_db),
@@ -80,7 +80,7 @@ def delete_character(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@router.put("/characters", response_model=CharacterResponse)
+@router.put("/characters/", response_model=CharacterResponse)
 def update_character(
     id: str,
     character: CharacterBase,
