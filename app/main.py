@@ -24,7 +24,10 @@ async def root():
 
 @app.get("/sqlalchemy")
 def test_character(db: Session = Depends(get_db)):
-    return {"status": "Success !"}
+    # characters = db.query(models.Character).all()
+    characters = db.query(models.Character)
+    print(characters)
+    return {"data": "success"}
 
 
 @app.get("/characters")
