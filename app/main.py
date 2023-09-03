@@ -1,4 +1,5 @@
 from fastapi import FastAPI, status, HTTPException, Response, Depends
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
@@ -13,6 +14,12 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello Baby"}
+
+
+@app.get("/all_characters", response_model=List[CharacterResponse])
+def get_characters(db: Session = Depends(get_db)):
+    character_list = db.query(models.Character).all()
+    return character_list
 
 
 @app.get("/characters")
