@@ -2,6 +2,7 @@ from jose import JOSEError, jwt
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timedelta
+from schemas.user import TokenData
 
 load_dotenv()
 
@@ -22,3 +23,14 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_jwt
+
+
+def verify_access_token(token: str, credentials_exception):
+    payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
+
+    id: str = payload.get("user_id")
+
+    if id is None:
+        raise credentials_exception
+
+    token_data = TokenData(user_id=id)
