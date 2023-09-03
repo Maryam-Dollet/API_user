@@ -8,7 +8,6 @@ import models
 from database_utils import engine, get_db
 from utils import hash
 
-# default hash algorithm = bcrypt
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
