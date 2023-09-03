@@ -8,8 +8,20 @@ from api_utils import (
     update_char,
 )
 from schemas.character import Character
+from . import models
+from .database_utils import engine, SessionLocal
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 @app.get("/")
