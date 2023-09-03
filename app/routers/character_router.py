@@ -105,7 +105,7 @@ def update_character(
     if not is_valid_uuid(id):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="cannot delete a non-existent id",
+            detail="cannot update a non-existent id",
         )
 
     character_query = db.query(models.Character).filter(
@@ -117,10 +117,10 @@ def update_character(
     if updated_character == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="cannot delete a non-existent id",
+            detail="cannot update a non-existent id",
         )
 
-    if character.user_id != current_user.user_id:
+    if updated_character.user_id != current_user.user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Not Authorized"
         )
