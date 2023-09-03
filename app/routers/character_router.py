@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
 from database_utils import get_db
+from utils import is_valid_uuid
 import models, oauth2
 
 router = APIRouter(tags=["Characters"])
@@ -64,23 +65,34 @@ def delete_character(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
-    try:
-        character = db.query(models.Character).filter(
-            models.Character.character_id == id
+    if not is_valid_uuid(id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
         )
 
-        if character.first() == None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="cannot delete a non-existent id",
-            )
+    character_query = db.query(models.Character).filter(
+        models.Character.character_id == id
+    )
 
-        character.delete(synchronize_session=False)
-        db.commit()
+    character = character_query.first()
+    print(character.character_id)
 
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-    except:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    if character == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
+        )
+
+    if character.user_id != current_user.user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not Authorized"
+        )
+
+    character_query.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.put("/characters/", response_model=CharacterResponse)
@@ -90,27 +102,35 @@ def update_character(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
-    try:
-        character_query = db.query(models.Character).filter(
-            models.Character.character_id == id
+    if not is_valid_uuid(id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
         )
 
-        updated_character = character_query.first()
+    character_query = db.query(models.Character).filter(
+        models.Character.character_id == id
+    )
 
-        if updated_character == None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="cannot delete a non-existent id",
-            )
+    updated_character = character_query.first()
 
-        if character.age == None:
-            character_info = character.model_dump(exclude="age")
-        else:
-            character_info = character.model_dump()
+    if updated_character == None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="cannot delete a non-existent id",
+        )
 
-        character_query.update(character_info, synchronize_session=False)
-        db.commit()
+    if character.user_id != current_user.user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not Authorized"
+        )
 
-        return character_query.first()
-    except:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    if character.age == None:
+        character_info = character.model_dump(exclude="age")
+    else:
+        character_info = character.model_dump()
+
+    character_query.update(character_info, synchronize_session=False)
+    db.commit()
+
+    return character_query.first()
