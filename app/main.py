@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
-from schemas.user import UserCreate
+from schemas.user import UserCreate, UserOut
 import models
 from database_utils import engine, get_db
 
@@ -108,7 +108,7 @@ def update_character(id: str, character: CharacterBase, db: Session = Depends(ge
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@app.post("/users", status_code=status.HTTP_201_CREATED)
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = models.User(**user.model_dump())
     db.add(new_user)
