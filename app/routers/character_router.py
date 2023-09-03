@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
 from database_utils import get_db
-import models
+import models, oauth2
 
 router = APIRouter(tags=["Characters"])
 
@@ -42,7 +42,11 @@ def get_character(id: str, db: Session = Depends(get_db)):
 @router.post(
     "/createchar", status_code=status.HTTP_201_CREATED, response_model=CharacterResponse
 )
-def create_char(character: CharacterBase, db: Session = Depends(get_db)):
+def create_char(
+    character: CharacterBase,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(oauth2.get_current_user),
+):
     # ** unpack the dictionary
     new_character = models.Character(**character.model_dump())
     db.add(new_character)
@@ -52,7 +56,11 @@ def create_char(character: CharacterBase, db: Session = Depends(get_db)):
 
 
 @router.delete("/characters", status_code=status.HTTP_204_NO_CONTENT)
-def delete_character(id: str, db: Session = Depends(get_db)):
+def delete_character(
+    id: str,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(oauth2.get_current_user),
+):
     try:
         character = db.query(models.Character).filter(
             models.Character.character_id == id
@@ -73,7 +81,12 @@ def delete_character(id: str, db: Session = Depends(get_db)):
 
 
 @router.put("/characters", response_model=CharacterResponse)
-def update_character(id: str, character: CharacterBase, db: Session = Depends(get_db)):
+def update_character(
+    id: str,
+    character: CharacterBase,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(oauth2.get_current_user),
+):
     try:
         character_query = db.query(models.Character).filter(
             models.Character.character_id == id
