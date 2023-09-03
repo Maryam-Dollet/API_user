@@ -1,6 +1,7 @@
 from database_utils import Base
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, String, Integer, text
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql.sqltypes import TIMESTAMP
 
 
 class Character(Base):
@@ -12,3 +13,6 @@ class Character(Base):
     occupation = Column(String, nullable=False)
     age = Column(Integer, nullable=True)
     affiliation = Column(String, nullable=True, server_default="Not Provided")
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
