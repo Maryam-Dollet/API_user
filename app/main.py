@@ -15,12 +15,6 @@ async def root():
     return {"message": "Hello Baby"}
 
 
-@app.get("/sqlalchemy")
-def test_character(db: Session = Depends(get_db)):
-    characters = db.query(models.Character).all()
-    return {"data": characters}
-
-
 @app.get("/characters")
 def get_character_id(db: Session = Depends(get_db)):
     character_id_list = db.query(models.Character.character_id).all()
