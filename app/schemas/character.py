@@ -2,19 +2,11 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class Character(BaseModel):
+class CharacterBase(BaseModel):
     name: str
     occupation: str
     age: int = None
 
 
-class CreateCharacter(BaseModel):
-    name: str
-    occupation: str
-    age: int = None
-
-
-class UpdateCharacter(BaseModel):
-    name: str
-    occupation: str
-    age: int
+class CharacterCreate(CharacterBase):
+    pass

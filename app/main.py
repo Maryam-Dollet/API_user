@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status, HTTPException, Response, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
-from schemas.character import Character
+from schemas.character import CharacterBase
 import models
 from database_utils import engine, get_db
 
@@ -46,7 +46,7 @@ def get_character(id: str, db: Session = Depends(get_db)):
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
-def create_char(character: Character, db: Session = Depends(get_db)):
+def create_char(character: CharacterBase, db: Session = Depends(get_db)):
     # ** unpack the dictionary
     new_character = models.Character(**character.model_dump())
     db.add(new_character)
@@ -77,7 +77,7 @@ def delete_character(id: str, db: Session = Depends(get_db)):
 
 
 @app.put("/characters/")
-def update_character(id: str, character: Character, db: Session = Depends(get_db)):
+def update_character(id: str, character: CharacterBase, db: Session = Depends(get_db)):
     try:
         character_query = db.query(models.Character).filter(
             models.Character.character_id == id
