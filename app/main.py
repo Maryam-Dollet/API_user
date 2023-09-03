@@ -122,7 +122,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@app.get("users/", response_model=UserOut)
+@app.get("/users", response_model=UserOut)
 def get_user(id: str, db: Session = Depends(get_db)):
     try:
         user = db.query(models.User).filter(models.User.user_id == id).first()
