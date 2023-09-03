@@ -1,8 +1,12 @@
-from jose import JOSEError, jwt
+from jose import JWTError, jwt
+from fastapi import Depends, status, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timedelta
 from schemas.user import TokenData
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 load_dotenv()
 
@@ -26,11 +30,24 @@ def create_access_token(data: dict):
 
 
 def verify_access_token(token: str, credentials_exception):
-    payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
+    try:
+        payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
 
-    id: str = payload.get("user_id")
+        id: str = payload.get("user_id")
 
-    if id is None:
+        if id is None:
+            raise credentials_exception
+
+        token_data = TokenData(user_id=id)
+    except JWTError:
         raise credentials_exception
 
-    token_data = TokenData(user_id=id)
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    return verify_access_token(token, credentials_exception)
