@@ -1,13 +1,6 @@
 from fastapi import FastAPI, status, HTTPException, Response, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
-
-from api_utils import (
-    add_character,
-    find_character,
-    remove_character,
-    update_char,
-)
 from schemas.character import Character
 import models
 from database_utils import engine, get_db
@@ -42,7 +35,6 @@ def get_character(id: str, db: Session = Depends(get_db)):
             .filter(models.Character.character_id == id)
             .first()
         )
-        # print(character_info)
         if not character_info:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

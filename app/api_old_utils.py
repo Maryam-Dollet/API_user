@@ -1,4 +1,3 @@
-import json
 from fastapi import status
 
 from database_utils import db_connection
