@@ -1,26 +1,27 @@
-from fastapi import FastAPI, status, HTTPException, Response, Depends
+from fastapi import status, HTTPException, Response, Depends, APIRouter
 from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
-from schemas.user import UserCreate, UserOut
-from database_utils import engine, get_db
+from database_utils import get_db
 import models
 
+router = APIRouter()
 
-@app.get("/all_characters", response_model=List[CharacterResponse])
+
+@router.get("/all_characters", response_model=List[CharacterResponse])
 def get_characters(db: Session = Depends(get_db)):
     character_list = db.query(models.Character).all()
     return character_list
 
 
-@app.get("/characters")
+@router.get("/characters")
 def get_character_id(db: Session = Depends(get_db)):
     character_id_list = db.query(models.Character.character_id).all()
     return [x[0] for x in character_id_list]
 
 
-@app.get("/characters/", response_model=CharacterResponse)
+@router.get("/characters/", response_model=CharacterResponse)
 def get_character(id: str, db: Session = Depends(get_db)):
     try:
         character_info = (
@@ -38,7 +39,7 @@ def get_character(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@app.post(
+@router.post(
     "/createchar", status_code=status.HTTP_201_CREATED, response_model=CharacterResponse
 )
 def create_char(character: CharacterBase, db: Session = Depends(get_db)):
@@ -50,7 +51,7 @@ def create_char(character: CharacterBase, db: Session = Depends(get_db)):
     return new_character
 
 
-@app.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/characters/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_character(id: str, db: Session = Depends(get_db)):
     try:
         character = db.query(models.Character).filter(
@@ -71,7 +72,7 @@ def delete_character(id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@app.put("/characters/", response_model=CharacterResponse)
+@router.put("/characters/", response_model=CharacterResponse)
 def update_character(id: str, character: CharacterBase, db: Session = Depends(get_db)):
     try:
         character_query = db.query(models.Character).filter(
