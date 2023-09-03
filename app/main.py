@@ -1,4 +1,5 @@
-from fastapi import FastAPI, status, HTTPException, Response
+from fastapi import FastAPI, status, HTTPException, Response, Depends
+from sqlalchemy.orm import Session
 
 from api_utils import (
     add_character,
@@ -8,8 +9,8 @@ from api_utils import (
     update_char,
 )
 from schemas.character import Character
-from . import models
-from .database_utils import engine, SessionLocal
+import models
+from database_utils import engine, SessionLocal
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -17,6 +18,7 @@ app = FastAPI()
 
 
 def get_db():
+    """Enables to Connect to the database then to close the connection once the request is fulfilled."""
     db = SessionLocal()
     try:
         yield db
@@ -27,6 +29,11 @@ def get_db():
 @app.get("/")
 async def root():
     return {"message": "Hello Baby"}
+
+
+@app.get("/sqlalchemy")
+def test_character(db: Session = Depends(get_db)):
+    return {"status": "Success !"}
 
 
 @app.get("/characters")
