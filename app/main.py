@@ -1,5 +1,6 @@
 from fastapi import FastAPI, status, HTTPException, Response, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import exc
 
 from api_utils import (
     add_character,
@@ -35,10 +36,21 @@ def get_character_id(db: Session = Depends(get_db)):
 
 @app.get("/characters/")
 def get_character(id: str, db: Session = Depends(get_db)):
-    character_info = (
-        db.query(models.Character).filter(models.Character.character_id == id).first()
-    )
-    return character_info
+    try:
+        character_info = (
+            db.query(models.Character)
+            .filter(models.Character.character_id == id)
+            .first()
+        )
+        if not character_info:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"character id {id} not found",
+            )
+        else:
+            return character_info
+    except (Exception, exc.SQLAlchemyError) as error:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
 
 
 @app.post("/createchar", status_code=status.HTTP_201_CREATED)
