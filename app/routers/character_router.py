@@ -45,8 +45,9 @@ def get_character(id: str, db: Session = Depends(get_db)):
 def create_char(
     character: CharacterBase,
     db: Session = Depends(get_db),
-    user_id: str = Depends(oauth2.get_current_user),
+    current_user: str = Depends(oauth2.get_current_user),
 ):
+    print(current_user.email)
     # ** unpack the dictionary
     new_character = models.Character(**character.model_dump())
     db.add(new_character)
@@ -59,7 +60,7 @@ def create_char(
 def delete_character(
     id: str,
     db: Session = Depends(get_db),
-    user_id: str = Depends(oauth2.get_current_user),
+    current_user: str = Depends(oauth2.get_current_user),
 ):
     try:
         character = db.query(models.Character).filter(
@@ -85,7 +86,7 @@ def update_character(
     id: str,
     character: CharacterBase,
     db: Session = Depends(get_db),
-    user_id: str = Depends(oauth2.get_current_user),
+    current_user: str = Depends(oauth2.get_current_user),
 ):
     try:
         character_query = db.query(models.Character).filter(
