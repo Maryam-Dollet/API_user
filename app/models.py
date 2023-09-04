@@ -1,5 +1,6 @@
 from database_utils import Base
-from sqlalchemy import Column, String, Integer, text
+from sqlalchemy import Column, String, Integer, text, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
@@ -16,6 +17,13 @@ class Character(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    user = relationship("User")
 
 
 class User(Base):
@@ -27,4 +35,18 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+    character_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("characters.character_id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        primary_key=True,
     )

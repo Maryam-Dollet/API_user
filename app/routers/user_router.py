@@ -20,7 +20,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.get("/{id}", response_model=UserOut)
+@router.get("/", response_model=UserOut)
 def get_user(id: str, db: Session = Depends(get_db)):
     try:
         user = db.query(models.User).filter(models.User.user_id == id).first()
