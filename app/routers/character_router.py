@@ -12,9 +12,12 @@ router = APIRouter(tags=["Characters"])
 
 @router.get("/characters/all_characters", response_model=List[CharacterResponse])
 def get_characters(
-    db: Session = Depends(get_db), current_user: str = Depends(oauth2.get_current_user)
+    db: Session = Depends(get_db),
+    current_user: str = Depends(oauth2.get_current_user),
+    limit: int = 10,
 ):
-    character_list = db.query(models.Character).all()
+    print(limit)
+    character_list = db.query(models.Character).limit(limit).all()
     return character_list
 
 

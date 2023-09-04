@@ -1,5 +1,6 @@
 from database_utils import Base
 from sqlalchemy import Column, String, Integer, text, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 
@@ -21,6 +22,8 @@ class Character(Base):
         ForeignKey("users.user_id", ondelete="CASCADE"),
         nullable=False,
     )
+
+    user = relationship("User")
 
 
 class User(Base):
