@@ -13,6 +13,17 @@ def vote(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
+    character = (
+        db.query(models.Character)
+        .filter(models.Character.character_id == vote.character_id)
+        .first()
+    )
+
+    if not character:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Character not Found"
+        )
+
     vote_query = db.query(models.Vote).filter(
         models.Vote.character_id == vote.character_id,
         models.Vote.user_id == current_user.user_id,
