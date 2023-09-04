@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 load_dotenv()
 # print(config.settings.model_dump())
 DATABASE = os.getenv("DATABASE")
-# DATABASE = settings["DATABASE"]
 USER = os.getenv("USER")
 HOST = os.getenv("HOST")
 PASSWORD = os.getenv("PASSWORD")
