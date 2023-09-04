@@ -8,6 +8,8 @@ from schemas.user import TokenData
 from sqlalchemy.orm import Session
 from database_utils import get_db
 
+# from config import settings
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 load_dotenv()

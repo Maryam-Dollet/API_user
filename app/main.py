@@ -4,7 +4,10 @@ import models
 from database_utils import engine
 from routers import character_router, user_router, auth
 
+# from config import settings
+
 models.Base.metadata.create_all(bind=engine)
+# print(settings.model_dump())
 
 app = FastAPI()
 
