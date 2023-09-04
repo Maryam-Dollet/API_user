@@ -6,4 +6,3 @@ from uuid import UUID
 class Vote(BaseModel):
     character_id: UUID
     dir: conint(gt=-1, le=1)
-    user_id: UUID

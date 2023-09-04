@@ -4,10 +4,10 @@ from schemas.vote import Vote
 from database_utils import get_db
 import models, oauth2
 
-router = APIRouter(prefix="/vote", tags=["Vote"])
+router = APIRouter(tags=["Vote"])
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/vote", status_code=status.HTTP_201_CREATED)
 def vote(
     vote: Vote,
     db: Session = Depends(get_db),
