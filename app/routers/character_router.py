@@ -51,7 +51,7 @@ def get_character_id(
     return [x[0] for x in character_id_list]
 
 
-@router.get("/characters/", response_model=CharacterResponse)
+@router.get("/characters/", response_model=CharacterOut)
 def get_character(
     id: str,
     db: Session = Depends(get_db),
@@ -67,10 +67,22 @@ def get_character(
         db.query(models.Character).filter(models.Character.character_id == id).first()
     )
 
-    if not character_info:
+    results = (
+        db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
+        .join(
+            models.Vote,
+            models.Vote.character_id == models.Character.character_id,
+            isouter=True,
+        )
+        .filter(models.Character.character_id == id)
+        .group_by(models.Character.character_id)
+        .all()
+    )
+
+    if not results:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
 
-    return character_info
+    return results
 
 
 @router.post(
