@@ -6,7 +6,7 @@ from routers import character_router, user_router, auth, vote_router
 
 # from config import settings
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 # print(settings.model_dump())
 
 app = FastAPI()
