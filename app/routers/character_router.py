@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException, Response, Depends, APIRouter
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import exc
 from schemas.character import CharacterBase, CharacterResponse
@@ -15,9 +15,17 @@ def get_characters(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
     limit: int = 10,
+    skip: int = 0,
+    search: Optional[str] = "",
 ):
     print(limit)
-    character_list = db.query(models.Character).limit(limit).all()
+    character_list = (
+        db.query(models.Character)
+        .filter(models.Character.name.contains(search))
+        .limit(limit)
+        .offset(skip)
+        .all()
+    )
     return character_list
 
 
