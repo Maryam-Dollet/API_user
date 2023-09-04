@@ -1,8 +1,8 @@
 from fastapi import status, HTTPException, Response, Depends, APIRouter
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import exc
-from schemas.character import CharacterBase, CharacterResponse
+from sqlalchemy import exc, func
+from schemas.character import CharacterBase, CharacterResponse, CharacterOut
 from database_utils import get_db
 from utils import is_valid_uuid
 import models, oauth2
@@ -10,7 +10,9 @@ import models, oauth2
 router = APIRouter(tags=["Characters"])
 
 
-@router.get("/characters/all_characters", response_model=List[CharacterResponse])
+# @router.get("/characters/all_characters", response_model=List[CharacterResponse])
+# @router.get("/characters/all_characters", response_model=List[CharacterOut])
+@router.get("/characters/all_characters", response_model=List[CharacterOut])
 def get_characters(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
@@ -18,7 +20,7 @@ def get_characters(
     skip: int = 0,
     search: Optional[str] = "",
 ):
-    print(limit)
+    # print(limit)s
     character_list = (
         db.query(models.Character)
         .filter(models.Character.name.contains(search))
@@ -26,7 +28,19 @@ def get_characters(
         .offset(skip)
         .all()
     )
-    return character_list
+    results = (
+        db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
+        .join(
+            models.Vote,
+            models.Vote.character_id == models.Character.character_id,
+            isouter=True,
+        )
+        .group_by(models.Character.character_id)
+        .all()
+    )
+    print(results)
+
+    return results
 
 
 @router.get("/characters")

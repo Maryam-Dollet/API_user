@@ -23,3 +23,11 @@ class CharacterResponse(CharacterBase):
 
     class Config:
         from_attributes = True
+
+
+class CharacterOut(BaseModel):
+    Character: CharacterResponse
+    votes: int
+
+    class Config:
+        from_attributes = True
