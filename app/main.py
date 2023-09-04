@@ -14,6 +14,7 @@ app = FastAPI()
 # middleware is a function that runs before any request
 # Specify the domains we want to allow to speak to the API
 origins = ["https://www.google.com", "https://www.google.fr"]
+# fetch('http://localhost:8000/').then(res => res.json()).then(console.log)
 # allow specific http methods
 # allow specific headers
 app.add_middleware(
