@@ -28,6 +28,3 @@ class CharacterResponse(CharacterBase):
 class CharacterOut(BaseModel):
     Character: CharacterResponse
     votes: int
-
-    class Config:
-        from_attributes = True

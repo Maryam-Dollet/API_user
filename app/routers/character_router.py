@@ -21,13 +21,13 @@ def get_characters(
     search: Optional[str] = "",
 ):
     # print(limit)s
-    character_list = (
-        db.query(models.Character)
-        .filter(models.Character.name.contains(search))
-        .limit(limit)
-        .offset(skip)
-        .all()
-    )
+    # character_list = (
+    #     db.query(models.Character)
+    #     .filter(models.Character.name.contains(search))
+    #     .limit(limit)
+    #     .offset(skip)
+    #     .all()
+    # )
     results = (
         db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
         .join(
@@ -36,6 +36,9 @@ def get_characters(
             isouter=True,
         )
         .group_by(models.Character.character_id)
+        .filter(models.Character.name.contains(search))
+        .limit(limit)
+        .offset(skip)
         .all()
     )
     print(results)
@@ -63,9 +66,9 @@ def get_character(
             detail="Not Found",
         )
 
-    character_info = (
-        db.query(models.Character).filter(models.Character.character_id == id).first()
-    )
+    # character_info = (
+    #     db.query(models.Character).filter(models.Character.character_id == id).first()
+    # )
 
     results = (
         db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
@@ -76,7 +79,7 @@ def get_character(
         )
         .filter(models.Character.character_id == id)
         .group_by(models.Character.character_id)
-        .all()
+        .first()
     )
 
     if not results:
