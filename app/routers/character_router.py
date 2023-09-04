@@ -20,14 +20,6 @@ def get_characters(
     skip: int = 0,
     search: Optional[str] = "",
 ):
-    # print(limit)s
-    # character_list = (
-    #     db.query(models.Character)
-    #     .filter(models.Character.name.contains(search))
-    #     .limit(limit)
-    #     .offset(skip)
-    #     .all()
-    # )
     results = (
         db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
         .join(
@@ -65,10 +57,6 @@ def get_character(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Not Found",
         )
-
-    # character_info = (
-    #     db.query(models.Character).filter(models.Character.character_id == id).first()
-    # )
 
     results = (
         db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
