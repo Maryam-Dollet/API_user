@@ -57,20 +57,20 @@ def get_character(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
-    try:
-        character_info = (
-            db.query(models.Character)
-            .filter(models.Character.character_id == id)
-            .first()
+    if not is_valid_uuid(id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not Found",
         )
-        if not character_info:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-        return character_info
-    except (Exception, exc.SQLAlchemyError) as error:
-        # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    character_info = (
+        db.query(models.Character).filter(models.Character.character_id == id).first()
+    )
+
+    if not character_info:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+
+    return character_info
 
 
 @router.post(
