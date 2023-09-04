@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
-from schemas.user import UserOut
+from app.schemas.user import UserOut
 
 
 class CharacterBase(BaseModel):

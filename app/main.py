@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import models
-from database_utils import engine
-from routers import character_router, user_router, auth, vote_router
+import app.models
+from app.database_utils import engine
+from app.routers import character_router, user_router, auth, vote_router
 
 # from config import settings
 

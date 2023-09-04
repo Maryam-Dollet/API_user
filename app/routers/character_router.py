@@ -2,10 +2,10 @@ from fastapi import status, HTTPException, Response, Depends, APIRouter
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import exc, func
-from schemas.character import CharacterBase, CharacterResponse, CharacterOut
-from database_utils import get_db
-from utils import is_valid_uuid
-import models, oauth2
+from app.schemas.character import CharacterBase, CharacterResponse, CharacterOut
+from app.database_utils import get_db
+from app.utils import is_valid_uuid
+from app import models, oauth2
 
 router = APIRouter(tags=["Characters"])
 
