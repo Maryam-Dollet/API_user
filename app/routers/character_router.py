@@ -10,7 +10,7 @@ import models, oauth2
 router = APIRouter(tags=["Characters"])
 
 
-@router.get("/all_characters", response_model=List[CharacterResponse])
+@router.get("/characters/all_characters", response_model=List[CharacterResponse])
 def get_characters(
     db: Session = Depends(get_db), current_user: str = Depends(oauth2.get_current_user)
 ):
