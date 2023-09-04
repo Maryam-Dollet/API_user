@@ -40,5 +40,13 @@ class User(Base):
 
 class Vote(Base):
     __tablename__ = "votes"
-    character_id = Column(UUID(as_uuid=True), primary_key=True)
-    user_id = Column(UUID(as_uuid=True), primary_key=True)
+    character_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("characters.character_id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        primary_key=True,
+    )
