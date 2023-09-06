@@ -3,6 +3,7 @@ FROM python:3.10-slim-bookworm
 RUN pip install poetry
 
 COPY app /api/
+COPY alembic /api/
 COPY pyproject.toml poetry.lock README.md /api/
 
 WORKDIR /api
