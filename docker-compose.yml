@@ -11,11 +11,11 @@ services:
       - ./.env
     # environment:
     #   - USER=postgres
-  postres:
+  postgres:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=ttrpg-2023
-      - POSTGRES_DB=ttrpg_api
+      - POSTGRES_DB=api_ttrpg
     volumes:
       - postres-db:/var/lib/postgresql/data
 
