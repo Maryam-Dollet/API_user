@@ -15,6 +15,8 @@ WORKDIR /usr/src/app
 
 COPY pyproject.toml poetry.lock README.md ./
 
+COPY scripts/uuid_extension.sql /docker-entrypoint-initdb.d
+
 RUN poetry install --no-root
 
 COPY . .
