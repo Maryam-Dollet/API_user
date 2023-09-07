@@ -17,8 +17,10 @@ services:
     environment:
       - POSTGRES_PASSWORD=ttrpg-2023
       - POSTGRES_DB=api_ttrpg
+      # - POSTGRES_EXTENSIONS=uuid-ossp
     volumes:
       - postres-db:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
 
 volumes:
   postres-db:
