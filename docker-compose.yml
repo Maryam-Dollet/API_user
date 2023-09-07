@@ -1,0 +1,28 @@
+version: '3.10'
+
+services:
+  api:
+    build: .
+    command: bash -c "poetry run alembic upgrade head && poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    depends_on:
+      - postgres
+    ports: 
+      - 8000:8000
+    # volumes:
+    #   - ./:/usr/src/app:ro
+    env_file:
+      - ./.env
+    # environment:
+    #   - USER=postgres
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=ttrpg-2023
+      - POSTGRES_DB=api_ttrpg
+      # - POSTGRES_EXTENSIONS=uuid-ossp
+    volumes:
+      - postres-db:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  postres-db:

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
-from schemas.user import UserOut
+from app.schemas.user import UserOut
 
 
 class CharacterBase(BaseModel):
@@ -23,3 +23,8 @@ class CharacterResponse(CharacterBase):
 
     class Config:
         from_attributes = True
+
+
+class CharacterOut(BaseModel):
+    Character: CharacterResponse
+    votes: int

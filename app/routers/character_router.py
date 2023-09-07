@@ -1,16 +1,18 @@
 from fastapi import status, HTTPException, Response, Depends, APIRouter
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import exc
-from schemas.character import CharacterBase, CharacterResponse
-from database_utils import get_db
-from utils import is_valid_uuid
-import models, oauth2
+from sqlalchemy import exc, func
+from app.schemas.character import CharacterBase, CharacterResponse, CharacterOut
+from app.database_utils import get_db
+from app.utils import is_valid_uuid
+from app import models, oauth2
 
 router = APIRouter(tags=["Characters"])
 
 
-@router.get("/characters/all_characters", response_model=List[CharacterResponse])
+# @router.get("/characters/all_characters", response_model=List[CharacterResponse])
+# @router.get("/characters/all_characters", response_model=List[CharacterOut])
+@router.get("/characters/all_characters", response_model=List[CharacterOut])
 def get_characters(
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
@@ -18,15 +20,22 @@ def get_characters(
     skip: int = 0,
     search: Optional[str] = "",
 ):
-    print(limit)
-    character_list = (
-        db.query(models.Character)
+    results = (
+        db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
+        .join(
+            models.Vote,
+            models.Vote.character_id == models.Character.character_id,
+            isouter=True,
+        )
+        .group_by(models.Character.character_id)
         .filter(models.Character.name.contains(search))
         .limit(limit)
         .offset(skip)
         .all()
     )
-    return character_list
+    print(results)
+
+    return results
 
 
 @router.get("/characters")
@@ -37,26 +46,34 @@ def get_character_id(
     return [x[0] for x in character_id_list]
 
 
-@router.get("/characters/", response_model=CharacterResponse)
+@router.get("/characters/", response_model=CharacterOut)
 def get_character(
     id: str,
     db: Session = Depends(get_db),
     current_user: str = Depends(oauth2.get_current_user),
 ):
-    try:
-        character_info = (
-            db.query(models.Character)
-            .filter(models.Character.character_id == id)
-            .first()
+    if not is_valid_uuid(id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not Found",
         )
-        if not character_info:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-        return character_info
-    except (Exception, exc.SQLAlchemyError) as error:
-        # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"{error}")
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    results = (
+        db.query(models.Character, func.count(models.Vote.character_id).label("votes"))
+        .join(
+            models.Vote,
+            models.Vote.character_id == models.Character.character_id,
+            isouter=True,
+        )
+        .filter(models.Character.character_id == id)
+        .group_by(models.Character.character_id)
+        .first()
+    )
+
+    if not results:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+
+    return results
 
 
 @router.post(
