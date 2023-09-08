@@ -19,6 +19,8 @@ SQLALCHEMY_DATABASE_URL = f"postgresql://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 if not database_exists(engine.url):
     create_database(engine.url)
+    with engine.connect() as connection:
+        connection.execute(text('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'))
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

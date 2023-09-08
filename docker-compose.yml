@@ -22,7 +22,7 @@ services:
       # - POSTGRES_EXTENSIONS=uuid-ossp
     volumes:
       - postres-db:/var/lib/postgresql/data
-      - ./scripts:/docker-entrypoint-initdb.d
+      # - ./scripts:/docker-entrypoint-initdb.d
 
 volumes:
   postres-db:
